@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <title>Cookie 复制插件</title>
+    <script src="popup.js" type="module"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            width: 300px;
+        }
+        .container h1 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666666;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            color: #ffffff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #github-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+        }
+        #github-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        #github-link a:hover {
+            text-decoration: underline;
+        }
+        #message {
+            display: none;
+            margin-top: 20px;
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cookie 复制插件</h1>
+        <form id="control-row">
+            <div class="form-group">
+                <label for="source">源域名:</label>
+                <input value="test.com" type="text" id="source" />
+            </div>
+            <div class="form-group">
+                <label for="input">目标域名:</label>
+                <input value="localhost" type="text" id="input" />
+            </div>
+            <button id="go">复制cookie到此域名</button>
+        </form>
+        <span id="message">操作成功</span>
+        <div id="github-link">
+            <a href="https://github.com/你的用户名/你的项目名" target="_blank">查看GitHub项目</a>
+        </div>
+    </div>
+</body>
+</html>
