@@ -1,5 +1,5 @@
 const form = document.getElementById('control-row');
-const input = document.getElementById('input');
+const targetInput = document.getElementById('target');
 const sourceInput = document.getElementById('source');
 const message = document.getElementById('message');
 
@@ -7,14 +7,24 @@ const message = document.getElementById('message');
 (async function initPopupWindow() {
   let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
+  // 从Chrome存储中获取默认源域名
+  chrome.storage.sync.get(['defaultSource'], function(result) {
+    if (result.defaultSource) {
+      sourceInput.value = result.defaultSource;
+    } else {
+      sourceInput.value = 'test.com';  // 初始默认值
+    }
+  });
+
   if (tab?.url) {
     try {
-      let url = new URL(tab.url);
-      input.value = 'localhost';
-      sourceInput.value = 'markiapp.com';
+      let url = new URL(tab.url)
+      targetInput.value = url.hostname
     } catch {
       // ignore
     }
+  } else {
+    targetInput.value = 'localhost';
   }
 
   input.focus();
@@ -27,13 +37,19 @@ async function handleFormSubmit(event) {
 
   clearMessage();
 
-  let url = stringToUrl(input.value);
-  if (!url) {
+  // 保存用户设置的源域名到Chrome存储中
+  chrome.storage.sync.set({defaultSource: sourceInput.value}, function() {
+    console.log('Default source domain saved: ' + sourceInput.value);
+  });
+
+
+  let targetUrl = stringToUrl(targetInput.value);
+  if (!targetUrl) {
     setMessage('Invalid URL');
     return;
   }
 
-  let message = await copyCookie(url);
+  let message = await copyCookie(sourceInput.value, targetInput.value);
   setMessage(message);
 }
 

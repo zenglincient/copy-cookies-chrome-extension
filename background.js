@@ -1,19 +1,17 @@
-export function copyCookie() {
+export function copyCookie(sourceDomain, targetDomain) {
   chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
     if (tabs && tabs.length > 0) {
       const tabId = tabs[0].id;
-      alert('tabs[0]: ' + tabId);
       chrome.scripting.executeScript({
         target: { tabId: tabId },
-        function: function() {
-          chrome.cookies.getAll({ url: window.location.href }, function(cookies) {
-            console.log('cookies: ' + JSON.stringify(cookies));
+        function: function(sourceDomain, targetDomain) {
+          chrome.cookies.getAll({ domain: sourceDomain }, function(cookies) {
             cookies.forEach(function(cookie) {
               chrome.cookies.set({
-                url: "http://localhost:8081",
+                url: `http://${targetDomain}`,
                 name: cookie.name,
                 value: cookie.value,
-                domain: "localhost",
+                domain: targetDomain,
                 path: cookie.path,
                 secure: cookie.secure,
                 httpOnly: cookie.httpOnly,
@@ -22,6 +20,7 @@ export function copyCookie() {
             });
           });
         },
+        args: [sourceDomain, targetDomain]
       });
     } else {
       alert('No active tab found');

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Cookie 复制插件</title>
-    <script src="popup.js" type="module"></script>
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -67,7 +67,6 @@
             text-decoration: underline;
         }
         #message {
-            display: none;
             margin-top: 20px;
             color: #ff0000;
         }
@@ -82,15 +81,19 @@
                 <input value="test.com" type="text" id="source" />
             </div>
             <div class="form-group">
-                <label for="input">目标域名:</label>
-                <input value="localhost" type="text" id="input" />
+                <label for="target">目标域名:</label>
+                <input value="" type="text" id="target" />
             </div>
             <button id="go">复制cookie到此域名</button>
         </form>
-        <span id="message">操作成功</span>
+        <div>
+            <span hidden id="message">操作成功</span>
+        </div>
+       
         <div id="github-link">
             <a href="https://github.com/zenglincient/copy-cookies-chrome-extension" target="_blank">查看GitHub项目</a>
         </div>
     </div>
+    <script src="popup.js" type="module"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
   "name": "复制cookie",
   "manifest_version": 3,
   "version": "1.0",
-  "permissions": ["cookies"],
+  "permissions": ["cookies", "storage", "activeTab"],
   "host_permissions": ["<all_urls>"],
   "action": {
     "default_popup": "popup.html"
