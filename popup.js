@@ -1,3 +1,4 @@
+// popup.js
 const form = document.getElementById('control-row');
 const targetInput = document.getElementById('target');
 const sourceInput = document.getElementById('source');
@@ -70,34 +71,47 @@ function stringToUrl(input) {
   return null;
 }
 
-async function copyCookie(url) {
+async function copyCookie(sourceDomain, targetUrl) {
   let totalCookies = 0;
   try {
-    const cookies = await chrome.cookies.getAll({ domain: sourceInput.value });
+      const cookies = await chrome.cookies.getAll({ domain: sourceDomain });
 
-    if (cookies.length === 0) {
-      return 'No cookies found';
-    }
+      if (cookies.length === 0) {
+          return 'No cookies found';
+      }
 
-    cookies.forEach(function(cookie) {
-      chrome.cookies.set({
-        url: url.href,
-        name: cookie.name,
-        value: cookie.value,
-        domain: url.hostname,
-        path: cookie.path,
-        secure: cookie.secure,
-        httpOnly: cookie.httpOnly,
-        expirationDate: cookie.expirationDate
+      cookies.forEach(function(cookie) {
+          // 注意这里的 url 参数应该是一个完整的 URL 字符串
+          chrome.cookies.set({
+              url: `https://${targetUrl}`, // 这里假设你的目标域名使用 http 协议
+              name: cookie.name,
+              value: cookie.value,
+              domain: targetUrl, // 使用 targetUrl 作为域名
+              path: cookie.path,
+              secure: cookie.secure,
+              httpOnly: cookie.httpOnly,
+              expirationDate: cookie.expirationDate
+          });
+          chrome.cookies.set({
+            url: `http://${targetUrl}`, // 这里假设你的目标域名使用 http 协议
+            name: cookie.name,
+            value: cookie.value,
+            domain: targetUrl, // 使用 targetUrl 作为域名
+            path: cookie.path,
+            secure: cookie.secure,
+            httpOnly: cookie.httpOnly,
+            expirationDate: cookie.expirationDate
+        });
+          totalCookies++;
       });
-      totalCookies++;
-    });
   } catch (error) {
-    return `Unexpected error: ${error.message}`;
+      return `Unexpected error: ${error.message}`;
   }
 
-  return `复制成功`;
+  return `${totalCookies} cookies copied successfully`;
 }
+
+
 
 function deleteCookie(cookie) {
   // Cookie deletion is largely modeled off of how deleting cookies works when using HTTP headers.
